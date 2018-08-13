@@ -23,13 +23,15 @@
     "babel-cli": "6.26.0",
     "babel-preset-env": "1.6.1",
     "babel-preset-stage-0": "6.24.1",
-    "cheerio": "^1.0.0-rc.2",
     "cross-env": "5.1.4",
     "jest": "21.2.1",
     "standard-version": "4.2.0"
   },
   "dependencies": {
-    "inspected": "^0.4.0",
-    "puppeteer": "^1.7.0"
+    "inspected": "0.4.0"
+  },
+  "optionalDependencies": {
+    "cheerio": "1.0.0-rc.2",
+    "puppeteer": "1.7.0"
   }
 }
