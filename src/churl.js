@@ -58,8 +58,6 @@ const churl = adapter => {
   funcs.forEach(f => {
     result[f] = createAdapted(adapter)[f]
   })
-  //result.get = createAdapted(adapter).get
-  //result.select = createAdapted(adapter).select
 
   return result
 }
