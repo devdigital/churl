@@ -11,15 +11,4 @@ describe('puppeteer adapter', () => {
 
     expect(content).toBeTruthy()
   })
-
-  it('should return page when calling context', async () => {
-    jest.setTimeout(20000)
-
-    let page = null
-    await puppeteer(async http => {
-      page = await http.context()
-    })
-
-    expect(page).toHaveProperty('domain')
-  })
 })

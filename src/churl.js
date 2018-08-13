@@ -20,6 +20,16 @@ const createAdapted = adapter => {
 
       return content
     },
+    select: async (content, selector) => {
+      // TODO: checks on content, selector
+      let selected = null
+
+      await adapter(async http => {
+        selected = await http.select(content, selector)
+      })
+
+      return selected
+    },
   }
 }
 
@@ -44,6 +54,10 @@ const churl = adapter => {
 
   func.get = async uri => {
     return createAdapted(adapter).get(uri)
+  }
+
+  func.select = async (content, selector) => {
+    return createAdapted(adapter).select(content, selector)
   }
 
   return func
