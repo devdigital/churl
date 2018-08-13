@@ -9,48 +9,48 @@ const puppeteerAdapter = async delegate => {
       await page.goto(uri)
       return await page.content()
     },
-    context: async () => page,
+    select: async (_, selector) => page.$(selector),
   })
 
   await page.close()
   await browser.close()
 }
 
-const puppeteerSelectorParser = selector => {}
-
-puppeteerAdapter.contextOptions = {
-  selectorParser: puppeteerSelectorParser,
-}
-
 export default puppeteerAdapter
 
-const toPuppeteerSelectorResolver = async (context, selector) => {
-  if (isString(selector)) {
-    return await context.$(selector)
-  }
-}
+// const puppeteerSelectorParser = selector => {}
 
-const puppeteerValueResolver = async (
-  context,
-  selectorOrDefinition,
-  result = {}
-) => {
-  if (isSelector(selectorOrDefinition)) {
-    const valueResolver = toPuppeteerSelectorResolver(
-      context,
-      selectorOrDefinition
-    )
-    return await valueResolver(context)
-  }
+// puppeteerAdapter.contextOptions = {
+//   selectorParser: puppeteerSelectorParser,
+// }
 
-  return await parseDefinitionObject(
-    context,
-    selectorOrDefinition,
-    puppeteerValueResolver
-  )
-}
+// const toPuppeteerSelectorResolver = async (context, selector) => {
+//   if (isString(selector)) {
+//     return await context.$(selector)
+//   }
+// }
 
-export const toPuppeteerOptions = page => ({
-  getContext: () => page,
-  valueResolver: puppeteerValueResolver,
-})
+// const puppeteerValueResolver = async (
+//   context,
+//   selectorOrDefinition,
+//   result = {}
+// ) => {
+//   if (isSelector(selectorOrDefinition)) {
+//     const valueResolver = toPuppeteerSelectorResolver(
+//       context,
+//       selectorOrDefinition
+//     )
+//     return await valueResolver(context)
+//   }
+
+//   return await parseDefinitionObject(
+//     context,
+//     selectorOrDefinition,
+//     puppeteerValueResolver
+//   )
+// }
+
+// export const toPuppeteerOptions = page => ({
+//   getContext: () => page,
+//   valueResolver: puppeteerValueResolver,
+// })

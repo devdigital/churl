@@ -5,25 +5,21 @@ import isFunction from 'inspected/schema/is-function'
 import isRequired from 'inspected/schema/is-required'
 import validate from 'inspected/validate'
 
-class Http {
-  constructor(adapter) {
-    if (isNil(adapter)) {
-      throw new Error('No adapter specified.')
-    }
+const createAdapted = adapter => {
+  return {
+    get: async uri => {
+      if (!isRequired(isString)(uri)) {
+        throw new Error('Uri must be a string.')
+      }
 
-    this.adapter = adapter
-  }
+      let content = null
 
-  async get(uri) {
-    if (isNil(uri)) {
-      throw new Error('No uri specified.')
-    }
+      await adapter(async http => {
+        content = await http.get(uri)
+      })
 
-    if (!isString(uri)) {
-      throw new Error('Uri should be a string.')
-    }
-
-    return await this.adapter.get(uri)
+      return content
+    },
   }
 }
 
@@ -33,33 +29,21 @@ const churl = adapter => {
   }
 
   if (!isFunction(adapter)) {
-    throw new Error(
-      'Adapter must be a function which returns an object with get and context functions.'
-    )
+    throw new Error('Adapter must be a function which returns an object.')
   }
 
   const func = async delegate => {
-    if (isRequired(isFunction)(delegate)) {
-      await adapter(async http => {
-        await delegate(new Http(http))
-      })
-
-      return
+    if (!isRequired(isFunction)(delegate)) {
+      throw new Error('Unexpected value, must be a function.')
     }
 
-    throw new Error('Unexpected value, must be a uri or delegate.')
+    await adapter(async http => {
+      await delegate(createAdapted(async process => await process(http)))
+    })
   }
 
   func.get = async uri => {
-    if (!isRequired(isString)(uri)) {
-      throw new Error('Uri must be a string.')
-    }
-
-    let content = null
-    await adapter(async http => {
-      content = await http.get(uri)
-    })
-    return content
+    return createAdapted(adapter).get(uri)
   }
 
   return func

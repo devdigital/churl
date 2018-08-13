@@ -1,5 +1,6 @@
 import churl from './churl'
 import puppeteer from './puppeteer'
+import testAdapterFactory from './utils.test'
 
 describe('churl', () => {
   it('should throw when adapter is undefined', () => {
@@ -12,14 +13,14 @@ describe('churl', () => {
 
   it('should throw when adapter is not object', () => {
     expect(() => churl(false)).toThrow(
-      'Adapter must be a function which returns an object with get and context functions.'
+      'Adapter must be a function which returns an object.'
     )
   })
 
-  it('should throw when uri/delegate is not string or function', async () => {
+  it('should throw when delegate is not a function', async () => {
     await expect(churl(() => {})(false)).rejects.toHaveProperty(
       'message',
-      'Unexpected value, must be a uri or delegate.'
+      'Unexpected value, must be a function.'
     )
   })
 
@@ -43,5 +44,14 @@ describe('churl', () => {
     })
 
     expect(content).toBeTruthy()
+  })
+
+  it('should return selected content', async () => {
+    const content = '<h2>Hello</h2>'
+    const http = churl(testAdapterFactory(content))
+
+    const selected = http.select(content, 'h2')
+    console.log(selected)
+    expect(selected).toBeTruthy()
   })
 })
