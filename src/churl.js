@@ -1,9 +1,7 @@
 import isNil from 'inspected/schema/is-nil'
 import isString from 'inspected/schema/is-string'
-import isObject from 'inspected/schema/is-object'
 import isFunction from 'inspected/schema/is-function'
 import isRequired from 'inspected/schema/is-required'
-import validate from 'inspected/validate'
 
 const createAdapted = adapter => {
   return {
@@ -21,7 +19,10 @@ const createAdapted = adapter => {
       return content
     },
     select: async (content, selector) => {
-      // TODO: checks on content, selector
+      if (isNil(selector)) {
+        throw new Error('No selector specified.')
+      }
+
       let selected = null
 
       await adapter(async http => {
@@ -42,7 +43,7 @@ const churl = adapter => {
     throw new Error('Adapter must be a function which returns an object.')
   }
 
-  const func = async delegate => {
+  const result = async delegate => {
     if (!isRequired(isFunction)(delegate)) {
       throw new Error('Unexpected value, must be a function.')
     }
@@ -52,15 +53,15 @@ const churl = adapter => {
     })
   }
 
-  func.get = async uri => {
-    return createAdapted(adapter).get(uri)
-  }
+  const funcs = ['get', 'select']
 
-  func.select = async (content, selector) => {
-    return createAdapted(adapter).select(content, selector)
-  }
+  funcs.forEach(f => {
+    result[f] = createAdapted(adapter)[f]
+  })
+  //result.get = createAdapted(adapter).get
+  //result.select = createAdapted(adapter).select
 
-  return func
+  return result
 }
 
 export default churl

@@ -33,14 +33,16 @@ describe('churl', () => {
     expect(content).toBeTruthy()
   })
 
-  it('should return content when invoked', async () => {
+  it('should return content with use', async () => {
     jest.setTimeout(30000)
 
     const use = churl(puppeteer)
 
     let content = null
+
     await use(async http => {
-      content = http.get('http://www.google.com')
+      content = await http.get('http://www.google.com')
+      content = await http.get('http://www.test.com')
     })
 
     expect(content).toBeTruthy()
