@@ -1,6 +1,6 @@
 import churl from './churl'
-import puppeteer from './puppeteer'
-import testAdapterFactory from './utils'
+import puppeteer from './adapters/puppeteer'
+import contentAdapterFactory from './adapters/content'
 
 describe('churl', () => {
   it('should throw when adapter is undefined', () => {
@@ -50,7 +50,7 @@ describe('churl', () => {
 
   it('should return selected content', async () => {
     const content = '<h2>Hello</h2>'
-    const http = churl(testAdapterFactory(content))
+    const http = churl(contentAdapterFactory(content))
 
     const selected = await http.select(content, 'h2')
     expect(selected.html()).toEqual('Hello')
