@@ -1,6 +1,6 @@
 import cheerio from 'cheerio'
 
-const testAdapterFactory = content => async delegate => {
+const contentAdapterFactory = content => async delegate => {
   await delegate({
     get: async () => content,
     select: async (content, selector) => {
@@ -10,4 +10,4 @@ const testAdapterFactory = content => async delegate => {
   })
 }
 
-export default testAdapterFactory
+export default contentAdapterFactory

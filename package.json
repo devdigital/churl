@@ -6,8 +6,8 @@
   "author": "devdigital <devdigital.cloud@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "babel ./src --out-dir . --ignore __tests__,utils.js",
-    "watch": "babel ./src -w . --out-dir . --ignore __tests__,utils.js",
+    "build": "babel ./src --out-dir . --ignore *.test.js",
+    "watch": "babel ./src -w . --out-dir . --ignore *.test.js",
     "test": "echo No tests specified",
     "test:watch": "jest --verbose --watchAll ",
     "release": "standard-version"
