@@ -1,4 +1,5 @@
 import puppeteer from 'puppeteer'
+import cheerio from 'cheerio'
 
 const puppeteerAdapter = async delegate => {
   const browser = await puppeteer.launch()
@@ -9,7 +10,14 @@ const puppeteerAdapter = async delegate => {
       await page.goto(uri)
       return await page.content()
     },
-    select: async (_, selector) => page.$(selector),
+    select: (content, selector) => {
+      const $ = cheerio.load(content)
+      return $(selector)
+    },
+    value: (content, selector) => {
+      const element = this.select(content, selector)
+      return element.html()
+    },
   })
 
   await page.close()

@@ -1,4 +1,4 @@
-import churl from './churl'
+import churl from './index'
 import puppeteer from './adapters/puppeteer'
 import contentAdapterFactory from './adapters/content'
 

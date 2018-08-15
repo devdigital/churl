@@ -2,39 +2,50 @@ import isNil from 'inspected/schema/is-nil'
 import isString from 'inspected/schema/is-string'
 import isFunction from 'inspected/schema/is-function'
 import isRequired from 'inspected/schema/is-required'
+import isObject from 'inspected/schema/is-object'
+import parse from './parse'
 
-const createAdapted = adapter => {
-  return {
-    get: async uri => {
-      if (!isRequired(isString)(uri)) {
-        throw new Error('Uri must be a string.')
-      }
+const createAdapted = adapter => ({
+  get: async uri => {
+    if (!isRequired(isString)(uri)) {
+      throw new Error('Uri must be a string.')
+    }
 
-      let content = null
+    let content = null
 
-      await adapter(async http => {
-        content = await http.get(uri)
-      })
+    await adapter(async http => {
+      content = await http.get(uri)
+    })
 
-      return content
-    },
-    select: async (content, selector) => {
-      if (isNil(selector)) {
-        throw new Error('No selector specified.')
-      }
+    return content
+  },
+  select: selector => content => {
+    if (isNil(selector)) {
+      throw new Error('No selector specified.')
+    }
 
-      let selected = null
+    let selected = null
 
-      await adapter(async http => {
-        selected = await http.select(content, selector)
-      })
+    await adapter(async http => {
+      selected = http.select(content, selector)
+    })
 
-      return selected
-    },
+    return selected
+  },
+  parse
+})
+
+const churl = options => adapter => {
+  if (!isNil(options) && !isObject(options)) {
+    throw new Error('Options is not a valid object.')
   }
-}
 
-const churl = adapter => {
+  const defaultOptions = {}
+
+  const mergedOptions = Object.assign({}, defaultOptions, options)
+
+  // TODO: use merged options
+
   if (isNil(adapter)) {
     throw new Error('Adapter is not specified.')
   }

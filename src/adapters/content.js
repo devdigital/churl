@@ -3,7 +3,7 @@ import cheerio from 'cheerio'
 const contentAdapterFactory = content => async delegate => {
   await delegate({
     get: async () => content,
-    select: async (content, selector) => {
+    select: (content, selector) => {
       const $ = cheerio.load(content)
       return $(selector)
     },
