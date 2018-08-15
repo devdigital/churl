@@ -43,7 +43,9 @@ const churl = adapter => {
     throw new Error('Adapter must be a function which returns an object.')
   }
 
-  const result = async delegate => {
+  const result = {}
+
+  result.use = async delegate => {
     if (!isRequired(isFunction)(delegate)) {
       throw new Error('Unexpected value, must be a function.')
     }

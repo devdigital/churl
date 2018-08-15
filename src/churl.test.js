@@ -17,8 +17,9 @@ describe('churl', () => {
     )
   })
 
-  it('should throw when delegate is not a function', async () => {
-    await expect(churl(() => {})(false)).rejects.toHaveProperty(
+  it('use should throw when delegate is not a function', async () => {
+    const { use } = churl(() => {})
+    await expect(use(false)).rejects.toHaveProperty(
       'message',
       'Unexpected value, must be a function.'
     )
@@ -27,8 +28,8 @@ describe('churl', () => {
   it('should return content when http get is passed uri', async () => {
     jest.setTimeout(30000)
 
-    const http = churl(puppeteer)
-    const content = await http.get('http://www.google.com')
+    const { get } = churl(puppeteer)
+    const content = await get('http://www.google.com')
 
     expect(content).toBeTruthy()
   })
@@ -36,13 +37,12 @@ describe('churl', () => {
   it('should return content with use', async () => {
     jest.setTimeout(30000)
 
-    const use = churl(puppeteer)
+    const { use } = churl(puppeteer)
 
     let content = null
 
-    await use(async http => {
-      content = await http.get('http://www.google.com')
-      content = await http.get('http://www.test.com')
+    await use(async ({ get }) => {
+      content = await get('http://www.google.com')
     })
 
     expect(content).toBeTruthy()
@@ -50,9 +50,9 @@ describe('churl', () => {
 
   it('should return selected content', async () => {
     const content = '<h2>Hello</h2>'
-    const http = churl(contentAdapterFactory(content))
+    const { select } = churl(contentAdapterFactory(content))
 
-    const selected = await http.select(content, 'h2')
+    const selected = await select(content, 'h2')
     expect(selected.html()).toEqual('Hello')
   })
 })
