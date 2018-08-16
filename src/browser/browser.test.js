@@ -1,6 +1,5 @@
 import browser from './browser'
 import puppeteer from './adapters/puppeteer'
-import contentAdapterFactory from './adapters/content'
 
 describe('browser', () => {
   it('should throw when options are not an object', () => {

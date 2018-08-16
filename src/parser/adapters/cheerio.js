@@ -1,13 +1,15 @@
 import cheerio from 'cheerio'
+import isNil from 'inspected/schema/is-nil'
 
 const cheerioAdapter = () => ({
-  select: (content, selector) => {
-    const $ = cheerio.load(content)
-    return $(selector)
+  context: content => console.log('content', content) || cheerio.load(content),
+  select: (context, selector) => {
+    console.log(context, selector)
+    return context(selector)
   },
-  value: (content, selector) => {
-    const element = this.select(content, selector)
-    return element.html()
+  value: (context, selector) => {
+    const element = context(selector)
+    return isNil(element) ? null : element.html()
   },
 })
 

@@ -1,4 +1,7 @@
-const parse = definition => content => {
+const parse = contextResolver => definition => content => {
+  // TODO: validate inputs
+
+  const context = contextResolver(content)
   return content
 }
 
