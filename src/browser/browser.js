@@ -36,7 +36,7 @@ const browser = options => adapter => {
   }
 
   if (!isFunction(adapter)) {
-    throw new Error('Adapter must be a function which returns an object.')
+    throw new Error('Adapter must be a function.')
   }
 
   const result = {}

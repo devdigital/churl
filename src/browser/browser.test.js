@@ -1,7 +1,6 @@
 import browser from './browser'
 import puppeteer from './adapters/puppeteer'
 import contentAdapterFactory from './adapters/content'
-import { get } from 'https'
 
 describe('browser', () => {
   it('should throw when options are not an object', () => {
@@ -17,9 +16,7 @@ describe('browser', () => {
   })
 
   it('should throw when adapter is not object', () => {
-    expect(() => browser()(false)).toThrow(
-      'Adapter must be a function which returns an object.'
-    )
+    expect(() => browser()(false)).toThrow('Adapter must be a function.')
   })
 
   it('should return content from get', async () => {

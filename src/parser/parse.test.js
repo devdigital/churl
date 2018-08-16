@@ -1,13 +1,11 @@
-import churl from './index'
-import contentAdapterFactory from './adapters/content'
+import parse from './parse'
 
 describe('parse', () => {
   const content =
     '<h2>Hello</h2><ul><li><p>one</p></li><li><p>two</p></li></ul>'
 
-  const { parse, value, select } = churl(contentAdapterFactory(content))
-  it('should parse expected content', async () => {
-    const result = await parse({
+  it('should parse expected content', () => {
+    const result = parse({
       data: {
         title: value('h2'),
         items: {
