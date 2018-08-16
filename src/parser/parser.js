@@ -26,6 +26,7 @@ const parser = options => adapter => {
   return {
     context: adapted.context,
     select: selector => context => adapted.select(context, selector),
+    map: selector => context => adapted.map(context, selector),
     value: selector => context => adapted.value(context, selector),
     parse: parse(content => adapted.context(content)),
   }
