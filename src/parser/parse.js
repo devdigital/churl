@@ -1,6 +1,7 @@
 import isObject from 'inspected/schema/is-object'
 import isFunction from 'inspected/schema/is-function'
 import isNil from 'inspected/schema/is-nil'
+import isString from 'inspected/schema/is-string'
 
 // definition contains
 // type: 'item' or 'collection', default = 'item'
@@ -56,7 +57,9 @@ const getData = (loaded, map, context, data) => {
   }
 
   if (isFunction(data)) {
-    return data(loaded, context)
+    const foo = data(loaded, context)
+    console.log(foo, isString(foo))
+    return foo
   }
 
   if (isObject(data)) {
@@ -80,9 +83,12 @@ const parseDefinition = (loaded, map, definition, context) => {
 
   if (type === 'collection') {
     const itemContext = itemScope(loaded, context)
-    return map(loaded, itemContext, context =>
+    const foo = map(loaded, itemContext, context =>
       getData(loaded, map, context, data)
     )
+
+    console.log('compiled get data', foo)
+    return foo
   }
 
   return getData(loaded, map, context, data)

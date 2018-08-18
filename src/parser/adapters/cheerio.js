@@ -13,7 +13,9 @@ const value = (loaded, selector, context) => {
 }
 
 const map = (loaded, context, delegate) => {
-  return loaded(context).map((_, el) => delegate(el))
+  return loaded(context)
+    .get()
+    .map(i => delegate(i))
 }
 
 const cheerioAdapter = () => ({

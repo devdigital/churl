@@ -37,7 +37,6 @@ const parser = options => adapter => {
     load,
     select,
     value,
-    map,
     parse: configuredParse,
   }
 }
