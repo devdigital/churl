@@ -23,12 +23,22 @@ const parser = options => adapter => {
   }
 
   const adapted = adapter()
+
+  const load = content => adapted.load(content)
+  const select = selector => (loaded, context) =>
+    adapted.select(loaded, selector, context)
+  const value = selector => (loaded, context) =>
+    adapted.value(loaded, selector, context)
+  const map = (loaded, context, delegate) =>
+    adapted.map(loaded, context, delegate)
+  const configuredParse = parse({ load, map })
+
   return {
-    context: adapted.context,
-    select: selector => context => adapted.select(context, selector),
-    map: selector => context => adapted.map(context, selector),
-    value: selector => context => adapted.value(context, selector),
-    parse: parse(content => adapted.context(content)),
+    load,
+    select,
+    value,
+    map,
+    parse: configuredParse,
   }
 }
 

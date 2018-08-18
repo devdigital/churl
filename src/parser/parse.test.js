@@ -25,10 +25,10 @@ describe('parse', () => {
   })
 
   it('should return top level scalar collection', () => {
-    const { value, map, parse } = parser()(cheerio)
+    const { value, select, parse } = parser()(cheerio)
     const result = parse({
       type: 'collection',
-      itemScope: map('ul li'),
+      itemScope: select('ul li'),
       data: value('p'),
     })(content)
 

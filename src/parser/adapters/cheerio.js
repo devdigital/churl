@@ -1,15 +1,26 @@
 import cheerio from 'cheerio'
 import isNil from 'inspected/schema/is-nil'
 
-// TODO: rename map?
+const load = content => cheerio.load(content)
+
+const select = (loaded, selector, context) => {
+  return context ? loaded(selector, context) : loaded(selector)
+}
+
+const value = (loaded, selector, context) => {
+  const element = select(loaded, selector, context)
+  return isNil(element) ? null : element.html()
+}
+
+const map = (loaded, context, delegate) => {
+  return loaded(context).map((_, el) => delegate(el))
+}
+
 const cheerioAdapter = () => ({
-  context: content => cheerio.load(content),
-  select: (context, selector) => context(selector),
-  map: (context, selector) => context(selector).get(),
-  value: (context, selector) => {
-    const element = context(selector)
-    return isNil(element) ? null : element.html()
-  },
+  load,
+  select,
+  value,
+  map,
 })
 
 export default cheerioAdapter

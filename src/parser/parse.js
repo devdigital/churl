@@ -1,8 +1,6 @@
 import isObject from 'inspected/schema/is-object'
 import isFunction from 'inspected/schema/is-function'
 import isNil from 'inspected/schema/is-nil'
-import isArray from 'inspected/schema/is-array'
-import { getDefaultSettings } from 'http2'
 
 // definition contains
 // type: 'item' or 'collection', default = 'item'
@@ -16,7 +14,7 @@ const retrieve = definition => {
   }
 
   const type = definition.type || 'item'
-  const scope = definition.scope || (context => context)
+  const scope = definition.scope || ((_, context) => context)
   const itemScope = definition.itemScope
   const data = definition.data
 
@@ -52,22 +50,21 @@ const retrieve = definition => {
   }
 }
 
-const getData = (context, data) => {
+const getData = (loaded, map, context, data) => {
   if (isNil(data)) {
     throw new Error('Unexpected nil data.')
   }
 
-  console.log(data)
   if (isFunction(data)) {
-    return data(context)
+    return data(loaded, context)
   }
 
   if (isObject(data)) {
     return Object.keys(data).reduce((result, key) => {
       if (isObject(data[key])) {
-        result[key] = parseDefinition(context, data[key])
+        result[key] = parseDefinition(loaded, map, data[key], context)
       } else {
-        result[key] = data[key](context)
+        result[key] = data[key](loaded, context)
       }
       return result
     })
@@ -76,26 +73,32 @@ const getData = (context, data) => {
   throw new Error('Unexpected data type, must be a function or an object.')
 }
 
-const parseDefinition = (context, definition) => {
+const parseDefinition = (loaded, map, definition, context) => {
   const { type, scope, itemScope, data } = retrieve(definition)
 
-  context = scope(context)
+  context = scope(loaded, context)
 
   if (type === 'collection') {
-    const items = itemScope(context)
-    if (!isArray(items)) {
-      throw new Error('itemScope does not return a collection.')
-    }
-
-    return items.map(context => getData(context, data))
+    const itemContext = itemScope(loaded, context)
+    return map(loaded, itemContext, context =>
+      getData(loaded, map, context, data)
+    )
   }
 
-  return getData(context, data)
+  return getData(loaded, map, context, data)
 }
 
-const parse = contextResolver => definition => content => {
-  if (!isFunction(contextResolver)) {
-    throw new Error('contextResolver must be a function.')
+const parse = resolver => definition => content => {
+  if (!isObject(resolver)) {
+    throw new Error('resolver must be an object.')
+  }
+
+  if (!isFunction(resolver.load)) {
+    throw new Error('resolver.load must be a function.')
+  }
+
+  if (!isFunction(resolver.map)) {
+    throw new Error('resolver.map must be a function.')
   }
 
   if (!isObject(definition)) {
@@ -106,8 +109,8 @@ const parse = contextResolver => definition => content => {
     return null
   }
 
-  const context = contextResolver(content)
-  return parseDefinition(context, definition)
+  const loaded = resolver.load(content)
+  return parseDefinition(loaded, resolver.map, definition)
 }
 
 export default parse
