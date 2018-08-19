@@ -9,7 +9,7 @@
     "build": "babel ./src --out-dir . --ignore *.test.js",
     "watch": "babel ./src -w . --out-dir . --ignore *.test.js",
     "test": "echo No tests specified",
-    "test:watch": "jest --verbose --watchAll ",
+    "test:watch": "jest --watchAll",
     "release": "standard-version"
   },
   "jest": {

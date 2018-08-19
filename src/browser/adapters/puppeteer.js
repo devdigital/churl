@@ -9,7 +9,6 @@ const puppeteerAdapter = async delegate => {
       await page.goto(uri)
       return await page.content()
     },
-    select: async (_, selector) => page.$(selector),
   })
 
   await page.close()
