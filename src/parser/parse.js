@@ -5,8 +5,8 @@ import isString from 'inspected/schema/is-string'
 
 // definition contains
 // type: 'item' or 'collection', default = 'item'
-// scope: function, default = context => context
-// itemScope: required for 'collection' type, no default, context => []
+// scope: function, default = (loaded, context) => context
+// itemScope: required for 'collection' type, no default, (loaded, context => itemContext)
 // data: function or data definition object
 
 const retrieve = definition => {
