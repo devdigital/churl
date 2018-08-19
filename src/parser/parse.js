@@ -57,9 +57,7 @@ const getData = (loaded, map, context, data) => {
   }
 
   if (isFunction(data)) {
-    const foo = data(loaded, context)
-    console.log(foo, isString(foo))
-    return foo
+    return data(loaded, context)
   }
 
   if (isObject(data)) {
@@ -70,7 +68,7 @@ const getData = (loaded, map, context, data) => {
         result[key] = data[key](loaded, context)
       }
       return result
-    })
+    }, {})
   }
 
   throw new Error('Unexpected data type, must be a function or an object.')
@@ -83,12 +81,9 @@ const parseDefinition = (loaded, map, definition, context) => {
 
   if (type === 'collection') {
     const itemContext = itemScope(loaded, context)
-    const foo = map(loaded, itemContext, context =>
+    return map(loaded, itemContext, context =>
       getData(loaded, map, context, data)
     )
-
-    console.log('compiled get data', foo)
-    return foo
   }
 
   return getData(loaded, map, context, data)
