@@ -5,6 +5,7 @@ const puppeteerAdapter = async delegate => {
   const page = await browser.newPage()
 
   await delegate({
+    context: () => page,
     get: async uri => {
       await page.goto(uri)
       return await page.content()

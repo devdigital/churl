@@ -1,5 +1,6 @@
 import browser from './browser'
 import puppeteer from './adapters/puppeteer'
+import { Page } from 'puppeteer/lib/Page'
 
 describe('browser', () => {
   it('should throw when options are not an object', () => {
@@ -37,5 +38,18 @@ describe('browser', () => {
     })
 
     expect(content).toBeTruthy()
+  })
+
+  it('should pass configured page function with page context', async () => {
+    const { use } = browser()(puppeteer)
+
+    let result = null
+    await use(async ({ page }) => {
+      await page('http://www.google.com', (context, uri) => {
+        result = { context, uri }
+      })
+    })
+
+    expect(result.context).toBeInstanceOf(Page)
   })
 })
