@@ -4,6 +4,8 @@ import isFunction from 'inspected/schema/is-function'
 import isRequired from 'inspected/schema/is-required'
 import isObject from 'inspected/schema/is-object'
 
+import pager from './pager'
+
 const createAdapted = adapter => ({
   get: async uri => {
     if (!isRequired(isString)(uri)) {
@@ -12,11 +14,20 @@ const createAdapted = adapter => ({
 
     let content = null
 
-    await adapter(async http => {
-      content = await http.get(uri)
+    await adapter(async adapted => {
+      content = await adapted.get(uri)
     })
 
     return content
+  },
+  page: async (uri, delegate) => {
+    if (!isRequired(isString)(uri)) {
+      throw new Error('Uri must be a string.')
+    }
+
+    await adapter(async adapted => {
+      pager(adapted.context(), uri)(delegate)
+    })
   },
 })
 
@@ -46,11 +57,12 @@ const browser = options => adapter => {
       throw new Error('Unexpected value, must be a function.')
     }
 
-    await adapter(async http => {
-      await delegate(createAdapted(async process => await process(http)))
+    await adapter(async adapted => {
+      await delegate(createAdapted(async process => await process(adapted)))
     })
   }
 
+  // Provide a subset of functions outside of 'use'
   const funcs = ['get']
 
   funcs.forEach(f => {
