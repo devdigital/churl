@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/devdigital/churl/compare/v0.2.1...v0.4.0) (2018-08-26)
+
+
+### Bug Fixes
+
+* uri to data ([33f08fd](https://github.com/devdigital/churl/commit/33f08fd))
+
+
+### Features
+
+* add page ([d7540b3](https://github.com/devdigital/churl/commit/d7540b3))
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/devdigital/churl/compare/v0.2.0...v0.3.0) (2018-08-21)
 
