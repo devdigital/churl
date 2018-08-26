@@ -22,7 +22,7 @@ const createAdapted = adapter => ({
   },
   page: async (data, delegate) => {
     await adapter(async adapted => {
-      pager(adapted.context(), data)(delegate)
+      await pager(adapted.context(), data)(delegate)
     })
   },
 })
