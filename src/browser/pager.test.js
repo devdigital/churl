@@ -22,11 +22,11 @@ describe('pager', () => {
     )
   })
 
-  it('should pass context and uri to delegate', async () => {
+  it('should pass context and data to delegate', async () => {
     let result = null
     await pager({ foo: 'bar' }, 'baz')(
-      async (context, uri) => (result = { context, uri })
+      async (context, data) => (result = { context, data })
     )
-    expect(result).toEqual({ context: { foo: 'bar' }, uri: 'baz' })
+    expect(result).toEqual({ context: { foo: 'bar' }, data: 'baz' })
   })
 })
