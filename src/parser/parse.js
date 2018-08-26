@@ -11,7 +11,7 @@ import isString from 'inspected/schema/is-string'
 
 const retrieve = definition => {
   if (!isObject(definition)) {
-    throw new Error('Definition is not a valid object.')
+    throw new Error('definition is not a valid object.')
   }
 
   const type = definition.type || 'item'
@@ -53,7 +53,7 @@ const retrieve = definition => {
 
 const getData = (loaded, map, context, data) => {
   if (isNil(data)) {
-    throw new Error('Unexpected nil data.')
+    throw new Error('unexpected nil data.')
   }
 
   if (isFunction(data)) {
@@ -71,7 +71,7 @@ const getData = (loaded, map, context, data) => {
     }, {})
   }
 
-  throw new Error('Unexpected data type, must be a function or an object.')
+  throw new Error('unexpected data type, must be a function or an object.')
 }
 
 const parseDefinition = (loaded, map, definition, context) => {
@@ -91,19 +91,19 @@ const parseDefinition = (loaded, map, definition, context) => {
 
 const parse = resolver => definition => content => {
   if (!isObject(resolver)) {
-    throw new Error('resolver must be an object.')
+    throw new Error('parse resolver must be an object.')
   }
 
   if (!isFunction(resolver.load)) {
-    throw new Error('resolver.load must be a function.')
+    throw new Error('parse resolver.load must be a function.')
   }
 
   if (!isFunction(resolver.map)) {
-    throw new Error('resolver.map must be a function.')
+    throw new Error('parse resolver.map must be a function.')
   }
 
   if (!isObject(definition)) {
-    throw new Error('definition must be an object.')
+    throw new Error('parse definition must be an object.')
   }
 
   if (isNil(content)) {

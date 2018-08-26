@@ -4,19 +4,19 @@ import { Page } from 'puppeteer/lib/Page'
 
 describe('browser', () => {
   it('should throw when options are not an object', () => {
-    expect(browser(false)).toThrow('Options is not a valid object.')
+    expect(browser(false)).toThrow('browser options is not a valid object.')
   })
 
   it('should throw when adapter is undefined', () => {
-    expect(() => browser()()).toThrow('Adapter is not specified.')
+    expect(() => browser()()).toThrow('browser adapter is not specified.')
   })
 
   it('should throw when adapter is null', () => {
-    expect(() => browser()(null)).toThrow('Adapter is not specified.')
+    expect(() => browser()(null)).toThrow('browser adapter is not specified.')
   })
 
   it('should throw when adapter is not object', () => {
-    expect(() => browser()(false)).toThrow('Adapter must be a function.')
+    expect(() => browser()(false)).toThrow('browser adapter must be a function.')
   })
 
   it('should return content from get', async () => {
@@ -45,8 +45,8 @@ describe('browser', () => {
 
     let result = null
     await use(async ({ page }) => {
-      await page('http://www.google.com', (context, uri) => {
-        result = { context, uri }
+      await page('http://www.google.com', (context, data) => {
+        result = { context, data }
       })
     })
 
