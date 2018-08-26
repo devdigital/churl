@@ -4,21 +4,14 @@ describe('pager', () => {
   it('should throw if delegate is undefined', async () => {
     await expect(pager()()).rejects.toHaveProperty(
       'message',
-      'delegate must be specified.'
+      'page delegate must be specified.'
     )
   })
 
   it('should throw if delegate is null', async () => {
     await expect(pager()(null)).rejects.toHaveProperty(
       'message',
-      'delegate must be specified.'
-    )
-  })
-
-  it('should throw if delegate is not a function', async () => {
-    await expect(pager()(false)).rejects.toHaveProperty(
-      'message',
-      'delegate must be a function.'
+      'page delegate must be specified.'
     )
   })
 

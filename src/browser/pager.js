@@ -1,13 +1,8 @@
-import isFunction from 'inspected/schema/is-function'
 import isNil from 'inspected/schema/is-nil'
 
 const pager = (context, data) => async delegate => {
   if (isNil(delegate)) {
-    throw new Error('delegate must be specified.')
-  }
-
-  if (!isFunction(delegate)) {
-    throw new Error('delegate must be a function.')
+    throw new Error('page delegate must be specified.')
   }
 
   let currentContext = context

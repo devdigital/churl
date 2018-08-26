@@ -5,7 +5,7 @@ import parse from './parse'
 
 const parser = options => adapter => {
   if (!isNil(options) && !isObject(options)) {
-    throw new Error('Options is not a valid object.')
+    throw new Error('parse options is not a valid object.')
   }
 
   const defaultOptions = {}
@@ -15,11 +15,11 @@ const parser = options => adapter => {
   // TODO: use merged options
 
   if (isNil(adapter)) {
-    throw new Error('Adapter is not specified.')
+    throw new Error('parse adapter is not specified.')
   }
 
   if (!isFunction(adapter)) {
-    throw new Error('Adapter must be a function.')
+    throw new Error('parse adapter must be a function.')
   }
 
   const adapted = adapter()
