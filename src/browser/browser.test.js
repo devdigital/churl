@@ -16,7 +16,9 @@ describe('browser', () => {
   })
 
   it('should throw when adapter is not object', () => {
-    expect(() => browser()(false)).toThrow('browser adapter must be a function.')
+    expect(() => browser()(false)).toThrow(
+      'browser adapter must be a function.'
+    )
   })
 
   it('should return content from get', async () => {
@@ -45,11 +47,27 @@ describe('browser', () => {
 
     let result = null
     await use(async ({ page }) => {
-      await page('http://www.google.com', (context, data) => {
-        result = { context, data }
-      })
+      await page(accumulated => {
+        result = accumulated
+        return {
+          complete: true,
+        }
+      })()
     })
 
     expect(result.context).toBeInstanceOf(Page)
+  })
+
+  it('should return expected value from page', async () => {
+    const { use } = browser()(puppeteer)
+
+    let result = null
+    await use(async ({ page }) => {
+      result = await page(accumulated => {
+        return Object.assign({}, accumulated, { complete: true })
+      })('foo')
+    })
+
+    expect(result).toEqual('foo')
   })
 })

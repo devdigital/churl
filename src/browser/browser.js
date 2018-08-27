@@ -20,10 +20,14 @@ const createAdapted = adapter => ({
 
     return content
   },
-  page: async (data, delegate) => {
+  page: delegate => async data => {
+    let result = null
+
     await adapter(async adapted => {
-      await pager(adapted.context(), data)(delegate)
+      result = await pager(adapted.context())(delegate)(data)
     })
+
+    return result
   },
 })
 
