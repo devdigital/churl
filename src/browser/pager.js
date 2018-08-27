@@ -1,24 +1,24 @@
 import isNil from 'inspected/schema/is-nil'
 
-const pager = (context, data) => async delegate => {
+const pager = context => delegate => async value => {
   if (isNil(delegate)) {
     throw new Error('page delegate must be specified.')
   }
 
-  let currentContext = context
-  let currentData = data
+  let accumulated = { complete: false, context, value }
+  while (accumulated.complete === false) {
+    accumulated = await delegate(accumulated)
 
-  let result = { complete: false }
-  while (result.complete === false) {
-    result = await delegate(currentContext, currentData)
-
-    if (!result) {
+    if (!accumulated) {
       break
     }
-
-    currentContext = result.context
-    currentData = result.data
   }
+
+  if (!accumulated) {
+    return null
+  }
+
+  return accumulated.value ? accumulated.value : null
 }
 
 export default pager
