@@ -1,6 +1,6 @@
 {
   "name": "churl",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "main": "index.js",
   "repository": "https://github.com/devdigital/churl.git",
   "author": "devdigital <devdigital.cloud@gmail.com>",
